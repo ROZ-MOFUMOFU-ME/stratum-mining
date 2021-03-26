@@ -3,7 +3,7 @@ Jinja2==2.7.2
 Magic-file-extensions==0.2
 MarkupSafe==0.18
 MySQL-python==1.2.5
-PyYAML==3.10
+PyYAML==5.4
 Twisted==13.2.0
 ansible==1.4.5
 argparse==1.2.1
