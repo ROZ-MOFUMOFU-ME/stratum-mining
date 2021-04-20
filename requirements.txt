@@ -7,7 +7,7 @@ PyYAML==3.10
 Twisted==13.2.0
 ansible==1.4.5
 argparse==1.2.1
-autobahn==0.8.4-3
+autobahn==20.12.3
 cffi==0.8.2
 cryptography==0.2.2
 defer==1.0.6
