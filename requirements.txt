@@ -5,7 +5,7 @@ MarkupSafe==0.18
 MySQL-python==1.2.5
 PyYAML==3.10
 Twisted==13.2.0
-ansible==1.4.5
+ansible==4.2.0
 argparse==1.2.1
 autobahn==0.8.4-3
 cffi==0.8.2
