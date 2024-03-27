@@ -15,6 +15,8 @@ from Crypto.Hash import SHA256
 from twisted.internet.protocol import Protocol
 from util import *
 import settings
+if settings.ALGO_NAME != "SHA256":
+   algolib = __import__(settings.ALGO_NAME)
 
 import lib.logger
 log = lib.logger.get_logger('halfnode')
@@ -220,7 +222,22 @@ class CBlock(object):
             #log.debug("r: %s", binascii.hexlify(''.join(r)))
             self.sha256 = uint256_from_str(SHA256.new(SHA256.new(''.join(r)).digest()).digest())
         return self.sha256
-
+        
+    def calc_hash(self):
+        if self.hash is None:
+           r = []
+           r.append(struct.pack("<i", self.nVersion))
+           r.append(ser_uint256(self.hashPrevBlock))
+           r.append(ser_uint256(self.hashMerkleRoot))
+           r.append(struct.pack("<I", self.nTime))
+           r.append(struct.pack("<I", self.nBits))
+           r.append(struct.pack("<I", self.nNonce))
+           if settings.ALGO_NAME != "SHA256":
+              self.hash = uint256_from_str(algolib.getPoWHash(''.join(r)))
+           else:
+            self.sha256 = uint256_from_str(SHA256.new(SHA256.new(''.join(r)).digest()).digest())
+        return self.hash
+        
     def is_valid(self):
         self.calc_sha256()
         target = uint256_from_compact(self.nBits)
