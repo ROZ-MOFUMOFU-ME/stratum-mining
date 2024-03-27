@@ -18,7 +18,6 @@ class CoinbaseTransactionPOW(halfnode.CTransaction):
     def __init__(self, timestamper, coinbaser, values, flags, height, commitment, data):
         super(CoinbaseTransactionPOW, self).__init__()
         log.debug("Got to CoinBaseTX(POW)")
-        #self.extranonce = 0
         
         if len(self.extranonce_placeholder) != self.extranonce_size:
             raise Exception("Extranonce placeholder don't match expected length!")
