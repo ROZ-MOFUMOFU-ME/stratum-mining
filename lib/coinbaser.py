@@ -33,15 +33,9 @@ class SimpleCoinbaser(object):
             self.is_valid = True
             log.info("Coinbase address '%s' is valid" % self.address)
             if 'address' in result:
-               log.debug("Address = %s " % result['address'])
                self.address = result['address']
             if 'pubkey' in result:
-               log.debug("PubKey = %s " % result['pubkey'])
                self.pubkey = result['pubkey']
-            if 'iscompressed' in result:
-               log.debug("Is Compressed = %s " % result['iscompressed'])
-            if 'account' in result:
-               log.debug("Account = %s " % result['account'])
             if not self.on_load.called:
                self.address = result['address']
                self.on_load.callback(True)
@@ -52,8 +46,6 @@ class SimpleCoinbaser(object):
              if 'pubkey' in result:
                log.debug("PubKey = %s " % result['pubkey'])
                self.pubkey = result['pubkey']
-             if 'account' in result:
-               log.debug("Account = %s " % result['account'])
              if not self.on_load.called:
                     self.on_load.callback(True)
 
@@ -61,11 +53,6 @@ class SimpleCoinbaser(object):
             self.is_valid = False
             log.error("Coinbase address '%s' is NOT valid!" % self.address)
         
-        #def on_new_block(self):
-    #    pass
-    
-    #def on_new_template(self):
-    #    pass
     def _failure(self, failure):
            log.exception("Cannot validate Wallet address '%s'" % self.address)
            raise
