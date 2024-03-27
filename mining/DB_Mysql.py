@@ -8,7 +8,6 @@ import MySQLdb
                 
 class DB_Mysql():
     def __init__(self):
-        log.debug("Connecting to DB")
         
         required_settings = ['PASSWORD_SALT', 'DB_MYSQL_HOST', 
                              'DB_MYSQL_USER', 'DB_MYSQL_PASS', 
@@ -66,7 +65,6 @@ class DB_Mysql():
         # 9: invalid_reason, 
         # 10: share_diff
 
-        log.debug("Importing Shares")
         checkin_times = {}
         total_shares = 0
         best_diff = 0
@@ -166,29 +164,8 @@ class DB_Mysql():
             )
 
             self.dbh.commit()
-
-        
-    def list_users(self):
-        self.execute(
-            """
-            SELECT *
-            FROM `pool_worker`
-            WHERE `id`> 0
-            """
-        )
-        
-        while True:
-            results = self.dbc.fetchmany()
-            if not results:
-                break
-            
-            for result in results:
-                yield result
-                
                 
     def get_user(self, id_or_username):
-        log.debug("Finding user with id or username of %s", id_or_username)
-        
         self.execute(
             """
             SELECT *
@@ -206,7 +183,6 @@ class DB_Mysql():
         return user
 
     def get_uid(self, id_or_username):
-        log.debug("Finding user id of %s", id_or_username)
         uname = id_or_username.split(".", 1)[0]
         self.execute("SELECT `id` FROM `accounts` where username = %s", (uname))
         row = self.dbc.fetchone()
@@ -258,7 +234,6 @@ class DB_Mysql():
         self.dbh.commit()
 
     def insert_user(self, username, password):
-        log.debug("Adding new user %s", username)
         
         self.execute(
             """
@@ -278,7 +253,6 @@ class DB_Mysql():
         return str(username)
 
     def update_user(self, id_or_username, password):
-        log.debug("Updating password for user %s", id_or_username);
         
         self.execute(
             """
