@@ -41,29 +41,23 @@ class DBInterface():
 
     def connectDB(self):
         if settings.DATABASE_DRIVER == "sqlite":
-            log.debug('DB_Sqlite INIT')
             import DB_Sqlite
             return DB_Sqlite.DB_Sqlite()
         elif settings.DATABASE_DRIVER == "mysql":
              if settings.VARIABLE_DIFF:
-                log.debug("DB_Mysql_Vardiff INIT")
                 import DB_Mysql_Vardiff
                 return DB_Mysql_Vardiff.DB_Mysql_Vardiff()
              else:  
-                log.debug('DB_Mysql INIT')
                 import DB_Mysql
                 return DB_Mysql.DB_Mysql()
         elif settings.DATABASE_DRIVER == "postgresql":
-            log.debug('DB_Postgresql INIT')
             import DB_Postgresql
             return DB_Postgresql.DB_Postgresql()
         elif settings.DATABASE_DRIVER == "none":
-            log.debug('DB_None INIT')
             import DB_None
             return DB_None.DB_None()
         else:
             log.error('Invalid DATABASE_DRIVER -- using NONE')
-            log.debug('DB_None INIT')
             import DB_None
             return DB_None.DB_None()
 
