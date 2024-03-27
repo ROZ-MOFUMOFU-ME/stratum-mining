@@ -506,8 +506,6 @@ class BitcoinP2PProtocol(Protocol):
         h = SHA256.new(th).digest()
         tmsg += h[:4]
         tmsg += data
-        
-        #print tmsg, len(tmsg)
         self.transport.write(tmsg)
         self.last_sent = time.time()
         
@@ -516,7 +514,6 @@ class BitcoinP2PProtocol(Protocol):
             self.send_message(msg_ping())
 
         mname = 'do_' + message.command
-        #print mname
         if not hasattr(self, mname):
             return
 
@@ -524,7 +521,6 @@ class BitcoinP2PProtocol(Protocol):
         method(message)
 
     def do_version(self, message):
-        #print message
         self.send_message(msg_verack())
 
     def do_inv(self, message):
