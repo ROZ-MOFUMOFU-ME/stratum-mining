@@ -67,12 +67,10 @@ class BitcoinRPC(object):
         attempts = 0
         while True:
             attempts += 1
-            if self.has_submitblock == True:
+            if self.has_submitblock:
                 try:
-                    log.debug("Submitting Block with submitblock: attempt #"+str(attempts))
                     log.debug([block_hex,])
                     resp = (yield self._call('submitblock', [block_hex,]))
-                    log.debug("SUBMITBLOCK RESULT: %s", resp)
                     break
                 except Exception as e:
                     if attempts > 4:
@@ -80,11 +78,7 @@ class BitcoinRPC(object):
                         log.exception("Try Enabling TX Messages in config.py!")
                         raise
                     else:
-                        continue
-            elif self.has_submitblock == False:
                 try:
-                    log.debug("Submitting Block with getblocktemplate submit: attempt #"+str(attempts))
-                    log.debug([block_hex,])
                     resp = (yield self._call('getblocktemplate', [{'mode': 'submit', 'data': block_hex, "rules":["segwit"]}]))
                     break
                 except Exception as e:
@@ -92,31 +86,9 @@ class BitcoinRPC(object):
                         log.exception("getblocktemplate submit failed. Problem Submitting block %s" % str(e))
                         log.exception("Try Enabling TX Messages in config.py!")
                         raise
-                    else:
-                        continue
-            else:  # self.has_submitblock = None; unable to detect submitblock, try both
-                try:
-                    log.debug("Submitting Block with submitblock")
-                    log.debug([block_hex,])
-                    resp = (yield self._call('submitblock', [block_hex,]))
-                    break
-                except Exception as e:
-                    try:
-                        log.exception("submitblock Failed, does the coind have submitblock?")
-                        log.exception("Trying GetBlockTemplate")
-                        resp = (yield self._call('getblocktemplate', [{'mode': 'submit', 'data': block_hex, "rules":["segwit"]}]))
-                        break
-                    except Exception as e:
-                        if attempts > 4:
-                            log.exception("submitblock failed. Problem Submitting block %s" % str(e))
-                            log.exception("Try Enabling TX Messages in config.py!")
-                            raise
-                        else:
-                            continue
 
         if json.loads(resp)['result'] == None:
             # make sure the block was created.
-            log.info("CHECKING FOR BLOCK AFTER SUBMITBLOCK")
             defer.returnValue((yield self.blockexists(hash_hex, scrypt_hex)))
         else:
             defer.returnValue(False)
