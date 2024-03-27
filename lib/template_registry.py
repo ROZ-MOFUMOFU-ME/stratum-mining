@@ -91,8 +91,6 @@ class TemplateRegistry(object):
         for ph in self.prevhashes.keys():
             if ph != prevhash:
                 del self.prevhashes[ph]
-                
-        log.info("New template for %s" % prevhash)
 
         if new_block:
             # Tell the system about new block
@@ -101,11 +99,7 @@ class TemplateRegistry(object):
 
         # Everything is ready, let's broadcast jobs!
         self.on_template_callback(new_block)
-        
 
-        #from twisted.internet import reactor
-        #reactor.callLater(10, self.on_block_callback, new_block) 
-              
     def update_block(self):
         '''Registry calls the getblocktemplate() RPC
         and build new block template.'''
@@ -209,7 +203,7 @@ class TemplateRegistry(object):
 
         # Check for duplicated submit
         if not job.register_submit(extranonce1_bin, extranonce2_bin, ntime_bin, nonce_bin):
-            log.info("Duplicate from %s, (%s %s %s %s)" % \
+            log.debug("Duplicate from %s, (%s %s %s %s)" % \
                     (worker_name, binascii.hexlify(extranonce1_bin), extranonce2, ntime, nonce))
             raise SubmitException("Duplicate share")
         
@@ -242,11 +236,6 @@ class TemplateRegistry(object):
             log.debug("job.target : %d", job.target)
         if hash_int > target_user:
             raise SubmitException("Share is above target")
-
-        # Mostly for debugging purposes
-        target_info = self.diff_to_target(100000)
-        if hash_int <= target_info:
-            log.info("Yay, share with diff above 100000")
 
         # Algebra tells us the diff_to_target is the same as hash_to_diff
         share_diff = int(self.diff_to_target(hash_int))
