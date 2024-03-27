@@ -11,7 +11,6 @@ import settings
 import time
 
 import lib.logger
-log = lib.logger.get_logger('bitcoin_rpc_manager')
 
 from lib.bitcoin_rpc import BitcoinRPC
 
