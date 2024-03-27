@@ -34,7 +34,6 @@ class BlockTemplate(halfnode.CBlock):
     coinbase_transaction_class = CoinbaseTransactionPOW
 
     def __init__(self, timestamper, coinbaser, job_id):
-        log.debug("Got To Block_template.py")
         super(BlockTemplate, self).__init__()
 
         self.job_id = job_id
